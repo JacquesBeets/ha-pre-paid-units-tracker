@@ -2,6 +2,8 @@
   "domain": "grid_usage_tracker",
   "name": "Grid Usage Tracker",
   "version": "1.0",
+  "documentation": "https://github.com/JacquesBeets/ha-pre-paid-units-tracker",
+  "issue_tracker": "https://github.com/JacquesBeets/ha-pre-paid-units-tracker/issues",
   "requirements": [],
   "dependencies": [],
   "codeowners": ["@JacquesBeets"]

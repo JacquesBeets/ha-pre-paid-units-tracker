@@ -18,22 +18,30 @@ The Grid Usage Tracker is a custom component for Home Assistant that helps you m
 To configure the Grid Usage Tracker, add the following to your `configuration.yaml` file:
 
 ```yaml
+#Enable Custom Intergration
+grid_usage_tracker:
+
+# Register Custom Intergration Sensor
 sensor:
   - platform: grid_usage_tracker
     name: Grid Usage
-    monitored_conditions:
-      - total_usage
-      - peak_usage
-      - off_peak_usage
+```
+
+Add the following to your `scripts.yaml` to call the reset usage service.
+
+```yaml
+reset_grid_usage:
+  alias: Reset Grid Usage
+  sequence:
+    - service: grid_usage_tracker.reset_grid_usage
 ```
 
 ## Available Sensors
 
 The Grid Usage Tracker provides the following sensors:
 
-- `total_usage`: Tracks the total electricity usage from the grid.
-- `peak_usage`: Tracks the electricity usage during peak hours.
-- `off_peak_usage`: Tracks the electricity usage during off-peak hours.
+- `grid_usage`: Tracks the total electricity usage from the grid.
+
 
 ## Services
 
@@ -46,12 +54,8 @@ You can use the sensors in your Home Assistant dashboard to monitor your electri
 ```yaml
 type: entities
 entities:
-  - entity: sensor.grid_usage_total
-    name: Total Grid Usage
-  - entity: sensor.grid_usage_peak
-    name: Peak Grid Usage
-  - entity: sensor.grid_usage_off_peak
-    name: Off-Peak Grid Usage
+  - entity: sensor.grid_usage
+    name: Grid Usage
 ```
 
 ## Contributing
