@@ -1,0 +1,8 @@
+{
+  "domain": "grid_usage_tracker",
+  "name": "Grid Usage Tracker",
+  "version": "1.0",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@your_github_username"]
+}

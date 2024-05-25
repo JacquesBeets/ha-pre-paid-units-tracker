@@ -1,0 +1,3 @@
+reset_grid_usage:
+  description: "Reset the grid usage sensor"
+  fields: {}
