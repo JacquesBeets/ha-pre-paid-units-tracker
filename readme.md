@@ -25,6 +25,15 @@ grid_usage_tracker:
 sensor:
   - platform: grid_usage_tracker
     name: Grid Usage
+
+# Input for adding purchased units
+input_text:
+  prepaid_units:
+    name: Prepaid Units
+    initial: "0"
+    pattern: '^\d+(\.\d{1,2})?$'
+    mode: text
+    max: 10
 ```
 
 Add the following to your `scripts.yaml` to call the reset usage service.

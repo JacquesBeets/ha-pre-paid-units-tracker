@@ -14,12 +14,13 @@ STORAGE_PATH = "custom_components/grid_usage_tracker/grid_usage_data.json"
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_platform(hass: HomeAssistant, config: ConfigType, async_add_entities, discovery_info=None):
-    sensor = GridUsageSensor(hass)
-    async_add_entities([sensor], True)
-    _LOGGER.info("Grid Usage Sensor added to platform")
+    grid_usage_sensor = GridUsageSensor(hass)
+    remaining_units_sensor = RemainingUnitsSensor(hass)
+    async_add_entities([grid_usage_sensor, remaining_units_sensor], True)
+    _LOGGER.info("Grid Usage and Remaining Units Sensors added to platform")
 
     async def handle_reset(call):
-        await sensor.async_reset_usage()
+        await grid_usage_sensor.async_reset_usage()
         _LOGGER.info("Grid Usage Sensor reset")
 
     hass.services.async_register(DOMAIN, RESET_SERVICE, handle_reset)
@@ -84,3 +85,30 @@ class GridUsageSensor(SensorEntity):
     def _write_file(self, data):
         with open(STORAGE_PATH, 'w') as file:
             json.dump(data, file)
+
+class RemainingUnitsSensor(SensorEntity):
+    def __init__(self, hass: HomeAssistant):
+        self._hass = hass
+        self._attr_name = "Remaining Units"
+        self._attr_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+
+    async def async_added_to_hass(self):
+        self.async_write_ha_state()
+
+    @property
+    def name(self):
+        return self._attr_name
+
+    @property
+    def state(self):
+        prepaid_units = self._hass.states.get("input_text.prepaid_units")
+        grid_usage = self._hass.states.get("sensor.grid_usage")
+        if prepaid_units and grid_usage:
+            remaining_units = float(prepaid_units.state) - float(grid_usage.state)
+            return round(remaining_units, 2)
+        return None
+
+    @property
+    def unit_of_measurement(self):
+        return self._attr_unit_of_measurement
+
